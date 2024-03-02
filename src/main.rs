@@ -1,8 +1,6 @@
-use std::panic::panic_any;
-use std::rc::Rc;
 use std::sync::{Arc, RwLock};
 use rand::Rng;
-use raylib::ffi::printf;
+
 use raylib::prelude::*;
 use crate::RenderState::{Hidden, Visible};
 use crate::State::{Empty, Killed, Pressed, Ship};
@@ -14,7 +12,7 @@ const WINDOW_WIDTH: i32 = 1920;
 const WINDOW_HEIGHT: i32 = 800;
 
 #[derive(PartialEq, Eq, Clone)]
-enum State {
+pub enum State {
     Empty,
     Ship,
     Killed,
@@ -22,7 +20,7 @@ enum State {
 }
 
 #[derive(PartialEq, Eq)]
-enum RenderState {
+pub enum RenderState {
     Visible,
     Hidden,
 }
@@ -149,7 +147,7 @@ impl Field {
     }
 
     pub fn mark(&mut self, location: Point<i32>) -> State {
-        let mut node_at_loc = &mut self.matrix[location.x as usize][location.y as usize];
+        let node_at_loc = &mut self.matrix[location.x as usize][location.y as usize];
 
         (*node_at_loc).render_state = RenderState::Visible;
 
@@ -340,8 +338,8 @@ fn main() {
 
     rl.set_target_fps(120);
 
-    let mut player_field = Arc::new(RwLock::new(Field::new(Point { x: 400, y: 100 }, true)));
-    let mut bot_field = Arc::new(RwLock::new(Field::new(Point { x: 1000, y: 100 }, false)));
+    let player_field = Arc::new(RwLock::new(Field::new(Point { x: 400, y: 100 }, true)));
+    let bot_field = Arc::new(RwLock::new(Field::new(Point { x: 1000, y: 100 }, false)));
 
     let mut bot = Session {
         own_field: bot_field.clone(),
