@@ -331,6 +331,8 @@ impl Field {
 }
 
 fn main() {
+    raylib::logging::set_trace_log(TraceLogLevel::LOG_ERROR);
+
     let (mut rl, thread) = raylib::init()
         .size(WINDOW_WIDTH, WINDOW_HEIGHT)
         .title("Sea Battle")
